@@ -3,5 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/gdata-contacts-3.0"/>
+	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/oauth2-v2r89lv1.18.0-rc"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Google-Client-Libraries"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/deps"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
