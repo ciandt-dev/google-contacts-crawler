@@ -1,95 +1,41 @@
 package DAO;
 
 import java.io.IOException;
-import java.net.URL;
-
-import com.google.api.server.spi.ServiceException;
-import com.google.gdata.client.contacts.ContactsService;
-import com.google.gdata.data.contacts.ContactEntry;
-import com.google.gdata.data.contacts.ContactFeed;
-import com.google.gdata.data.contacts.GroupMembershipInfo;
-import com.google.gdata.data.extensions.Email;
-import com.google.gdata.data.extensions.ExtendedProperty;
-import com.google.gdata.data.extensions.Im;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 
 
-public class GenericDAO {
+
     
     /**
      * Retrieving contacts
+     * @throws com.google.gdata.util.ServiceException 
      * 
      */
-    public static void printAllContacts(ContactsService myService)
-            throws ServiceException, IOException {
-          // Request the feed
-          URL feedUrl = new URL("https://www.google.com/m8/feeds/contacts/liz@gmail.com/full");
-          ContactFeed resultFeed = myService.getFeed(feedUrl, ContactFeed.class);
-          // Print the results
-          System.out.println(resultFeed.getTitle().getPlainText());
-          for (int i = 0; i < resultFeed.getEntries().size(); i++) {
-            ContactEntry entry = resultFeed.getEntries().get(i);
-            System.out.println("\t" + entry.getTitle().getPlainText());
+    public class GenericDAO extends HttpServlet {
+        @Override
+        public void doGet(HttpServletRequest req, HttpServletResponse resp)
+                throws IOException {
+            UserService userService = UserServiceFactory.getUserService();
 
-            System.out.println("Email addresses:");
-            for (Email email : entry.getEmailAddresses()) {
-              System.out.print(" " + email.getAddress());
-              if (email.getRel() != null) {
-                System.out.print(" rel:" + email.getRel());
-              }
-              if (email.getLabel() != null) {
-                System.out.print(" label:" + email.getLabel());
-              }
-              if (email.getPrimary()) {
-                System.out.print(" (primary) ");
-              }
-              System.out.print("\n");
+            String thisURL = req.getRequestURI();
+
+            resp.setContentType("text/html");
+            if (req.getUserPrincipal() != null) {
+                resp.getWriter().println("<p>Hello, " +
+                                         req.getUserPrincipal().getName() +
+                                         "!  You can <a href=\"" +
+                                         userService.createLogoutURL(thisURL) +
+                                         "\">sign out</a>.</p>");
+            } else {
+                resp.getWriter().println("<p>Please <a href=\"" +
+                                         userService.createLoginURL(thisURL) +
+                                         "\">sign in</a>.</p>");
             }
-
-            System.out.println("IM addresses:");
-            for (Im im : entry.getImAddresses()) {
-              System.out.print(" " + im.getAddress());
-              if (im.getLabel() != null) {
-                System.out.print(" label:" + im.getLabel());
-              }
-              if (im.getRel() != null) {
-                System.out.print(" rel:" + im.getRel());
-              }
-              if (im.getProtocol() != null) {
-                System.out.print(" protocol:" + im.getProtocol());
-              }
-              if (im.getPrimary()) {
-                System.out.print(" (primary) ");
-              }
-              System.out.print("\n");
-            }
-
-            System.out.println("Groups:");
-            for (GroupMembershipInfo group : entry.getGroupMembershipInfos()) {
-              String groupHref = group.getHref();
-              System.out.println("  Id: " + groupHref);
-            }
-
-            System.out.println("Extended Properties:");
-            for (ExtendedProperty property : entry.getExtendedProperties()) {
-              if (property.getValue() != null) {
-                System.out.println("  " + property.getName() + "(value) = " +
-                    property.getValue());
-              } else if (property.getXmlBlob() != null) {
-                System.out.println("  " + property.getName() + "(xmlBlob)= " +
-                    property.getXmlBlob().getBlob());
-              }
-            }
-
-            String photoLink = entry.getContactPhotoLink().getHref();
-            System.out.println("Photo Link: " + photoLink);
-
-            if (photoLink.getEtag() != null) {
-              System.out.println("Contact Photo's ETag: " + photoLink.getEtag());
-            }
-
-            System.out.println("Contact's ETag: " + entry.getEtag());
-          }
         }
-       
+
 }
 
