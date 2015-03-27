@@ -1,4 +1,4 @@
-package Controller;
+package br.com.ciandt.gcc.controller.service;
 
 import java.io.IOException;
 
@@ -7,7 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import Model.Mail;
+import com.google.appengine.api.users.User;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
+import br.com.ciandt.gcc.controller.model.Mail;
 
 
 @SuppressWarnings("serial")
@@ -27,7 +31,17 @@ public class CheckLogin extends HttpServlet {
             mailUser.setEndMail("teste@ciandt.com");
             
             
-            if(mailUser.getEndMail() == ""){
+            UserService userService = UserServiceFactory.getUserService();    
+            User user = userService.getCurrentUser();
+
+            
+            String userMail = user.getEmail();
+            
+            
+            resp.getWriter().println(userMail);
+            
+            
+            /*if(mailUser.getEndMail() == ""){
              
                 resp.getWriter().println("valor nulo");
                 
@@ -44,7 +58,7 @@ public class CheckLogin extends HttpServlet {
                 }else{
                     
                     resp.getWriter().println("NÂO");
-                }
+                }*/
                 
             }
 

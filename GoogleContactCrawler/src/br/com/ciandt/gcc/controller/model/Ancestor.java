@@ -1,4 +1,4 @@
-package Model;
+package br.com.ciandt.gcc.controller.model;
 
 import java.util.Date;
 

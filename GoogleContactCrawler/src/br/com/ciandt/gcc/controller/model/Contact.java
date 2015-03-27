@@ -1,4 +1,4 @@
-package Model;
+package br.com.ciandt.gcc.controller.model;
 
 public class Contact extends Ancestor {
 
