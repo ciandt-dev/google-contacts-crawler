@@ -41,7 +41,7 @@ public class CheckLogin extends HttpServlet {
             resp.getWriter().println(userMail);
             
             
-            /*if(mailUser.getEndMail() == ""){
+            if(mailUser.getEndMail() == ""){
              
                 resp.getWriter().println("valor nulo");
                 
@@ -58,7 +58,7 @@ public class CheckLogin extends HttpServlet {
                 }else{
                     
                     resp.getWriter().println("NÂO");
-                }*/
+                }
                 
             }
 
