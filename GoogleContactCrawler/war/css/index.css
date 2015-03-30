@@ -75,6 +75,22 @@ body {
     color: #909090;
 }
 
+.text-title{
+	
+	font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    font-size: 9px;
+	font-weight: bold;
+	color: red;
+}
+
+.center-text{
+	
+	margin-top: 30px;
+	margin-bottom: 30px;
+	
+}
+
 
 .button-accept{
 	
@@ -85,7 +101,7 @@ body {
 
 .text-button{
 
-	margin-left: 8px;
+	margin-right: 8px;
 	
 }
 

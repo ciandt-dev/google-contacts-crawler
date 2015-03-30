@@ -12,21 +12,22 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 			<url-pattern>/*</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
-			<role-name>*</role-name>
+			<role-name>*</role-name> <!-- Pode ser “admin” -->
 		</auth-constraint>
 	</security-constraint>
+
 	<servlet>
-		<servlet-name>CheckLogin</servlet-name>
-		<servlet-class>br.com.ciandt.gcc.controller.service.UserAuth</servlet-class>
-	</servlet>
+        <servlet-name>CheckLogin</servlet-name>
+        <servlet-class>br.com.ciandt.gcc.controller.service.CheckLogin</servlet-class>
+    </servlet>
 
 	<servlet-mapping>
-		<servlet-name>CheckLogin</servlet-name>
-		<url-pattern>/CheckLogin</url-pattern>
-	</servlet-mapping>
-
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
+        <servlet-name>CheckLogin</servlet-name>
+        <url-pattern>/CheckLogin</url-pattern>
+    </servlet-mapping>
+    
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 
 </web-app>
