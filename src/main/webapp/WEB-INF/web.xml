@@ -19,6 +19,14 @@
 		<servlet-name>OAuth2Callback</servlet-name>
 		<url-pattern>/oauth2callback</url-pattern>
 	</servlet-mapping>
+	<servlet>
+    <servlet-name>ImportContacts</servlet-name>
+    <servlet-class>com.ciandt.gcc.ImportContacts</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ImportContacts</servlet-name>
+    <url-pattern>/import</url-pattern>
+  </servlet-mapping>
 	<security-constraint>
       <web-resource-collection>
           <web-resource-name>app</web-resource-name>
@@ -28,5 +36,13 @@
           <role-name>*</role-name>
       </auth-constraint>
   </security-constraint>
-
+  <security-constraint>
+      <web-resource-collection>
+          <web-resource-name>import_cron</web-resource-name>
+         <url-pattern>/import</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+          <role-name>admin</role-name>
+      </auth-constraint>
+  </security-constraint>
 </web-app>
