@@ -1,11 +1,3 @@
-(function(){
-	var AUTHORIZATION_URL = "/authorize";
+$(function(){
 	app.bindEvents();
-})();
-
-var app = {
-	
-	authorize: function() {
-		
-	}
-};
+});
