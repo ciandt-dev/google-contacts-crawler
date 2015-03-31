@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.api.client.auth.oauth2.*;
 import com.google.api.client.extensions.appengine.auth.oauth2.AbstractAppEngineAuthorizationCodeCallbackServlet;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserServiceFactory;
 
 public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackServlet {
@@ -17,7 +18,17 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
   @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
       throws ServletException, IOException {
-    resp.sendRedirect("/");
+    
+    String email = UserServiceFactory.getUserService().getCurrentUser().getEmail();
+    long expireTime = (System.currentTimeMillis() / 1000L) + credential.getExpiresInSeconds();
+    
+    Entity user = new Entity("User", email);
+    user.setProperty("accessToken", credential.getAccessToken());
+    user.setProperty("expireTime", expireTime);
+    user.setProperty("refreshToken", credential.getRefreshToken());
+    
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(user);
   }
 
   @Override
