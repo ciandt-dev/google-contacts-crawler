@@ -20,15 +20,27 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
       throws ServletException, IOException {
     
     String email = UserServiceFactory.getUserService().getCurrentUser().getEmail();
-    long expireTime = (System.currentTimeMillis() / 1000L) + credential.getExpiresInSeconds();
     
-    Entity user = new Entity("User", email);
-    user.setProperty("accessToken", credential.getAccessToken());
-    user.setProperty("expireTime", expireTime);
-    user.setProperty("refreshToken", credential.getRefreshToken());
+    ValidateMail v = new ValidateMail();
+    boolean validatedMail = v.validate(email);
     
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(user);
+    if(validatedMail == true){
+        
+        long expireTime = (System.currentTimeMillis() / 1000L) + credential.getExpiresInSeconds();
+        
+        Entity user = new Entity("User", email);
+        user.setProperty("accessToken", credential.getAccessToken());
+        user.setProperty("expireTime", expireTime);
+        user.setProperty("refreshToken", credential.getRefreshToken());
+        
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(user);
+        
+    }else{
+        
+        resp.getWriter().println("Não é um e-mail CIANDT");
+    }
+    
   }
 
   @Override

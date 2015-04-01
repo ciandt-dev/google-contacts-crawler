@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
@@ -11,6 +13,16 @@
 		<servlet-name>Authorize</servlet-name>
 		<url-pattern>/authorize</url-pattern>
 	</servlet-mapping>
+	<security-constraint>
+      <web-resource-collection>
+          <web-resource-name>MySecureResources</web-resource-name>
+          <description>Some Description</description>
+          <url-pattern>/authorize</url-pattern>
+      </web-resource-collection>
+      <auth-constraint>
+          <role-name>*</role-name>
+      </auth-constraint>
+  </security-constraint>
 	<servlet>
 		<servlet-name>OAuth2Callback</servlet-name>
 		<servlet-class>com.ciandt.gcc.OAuth2Callback</servlet-class>
@@ -19,5 +31,12 @@
 		<servlet-name>OAuth2Callback</servlet-name>
 		<url-pattern>/oauth2callback</url-pattern>
 	</servlet-mapping>
-
+	<servlet>
+        <servlet-name>CheckLogin</servlet-name>
+        <servlet-class>com.ciandt.gcc.CheckLogin</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CheckLogin</servlet-name>
+        <url-pattern>/CheckLogin</url-pattern>
+    </servlet-mapping>  
 </web-app>
