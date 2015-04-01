@@ -19,7 +19,7 @@
 	<!-- End Font's -->
 	
 	<!-- Icons Font's -->
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 	<!-- End Icons Font's -->
 	
 	<!-- Libraries Bootstrap -->
@@ -52,7 +52,7 @@
             </div>
             <div class="button-accept">
                 <button id="authorize-button" class="btn btn-sm btn-success"><i class="text-button fa fa-check-square-o fa-lg"></i>Agree</button>
-                <a href="CheckLogin"><button class="btn btn-sm btn-danger"><i class="text-button fa fa-times fa-lg"></i>Disagree</button></a>
+                <a href="retrievingcontacts"><button class="btn btn-sm btn-danger"><i class="text-button fa fa-times fa-lg"></i>Disagree</button></a>
             </div>
             <div class="footer">
                 <span><img class="icon-ciandt" src="img/ciandt.png"/></span><span class="aling-text-footer"><label class="text-footer">- All Rights Reserved CI&T</label></span>

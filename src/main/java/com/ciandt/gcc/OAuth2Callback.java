@@ -11,38 +11,29 @@ import com.google.api.client.extensions.appengine.auth.oauth2.AbstractAppEngineA
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserServiceFactory;
 
+
 public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackServlet {
 
   private static final long serialVersionUID = 1L;
 
-  @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
       throws ServletException, IOException {
     
     String email = UserServiceFactory.getUserService().getCurrentUser().getEmail();
     
-    ValidateMail v = new ValidateMail();
-    boolean validatedMail = v.validate(email);
+    long expireTime = (System.currentTimeMillis() / 1000L) + credential.getExpiresInSeconds();
+        
+    Entity user = new Entity("User", email);
+    user.setProperty("accessToken", credential.getAccessToken());
+    user.setProperty("expireTime", expireTime);
+    user.setProperty("refreshToken", credential.getRefreshToken());
     
-    if(validatedMail == true){
-        
-        long expireTime = (System.currentTimeMillis() / 1000L) + credential.getExpiresInSeconds();
-        
-        Entity user = new Entity("User", email);
-        user.setProperty("accessToken", credential.getAccessToken());
-        user.setProperty("expireTime", expireTime);
-        user.setProperty("refreshToken", credential.getRefreshToken());
-        
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        datastore.put(user);
-        
-    }else{
-        
-        resp.getWriter().println("Não é um e-mail CIANDT");
-    }
+    
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(user);
     
   }
-
+    
   @Override
   protected void onError(
       HttpServletRequest req, HttpServletResponse resp, AuthorizationCodeResponseUrl errorResponse)

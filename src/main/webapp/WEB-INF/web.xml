@@ -31,12 +31,4 @@
 		<servlet-name>OAuth2Callback</servlet-name>
 		<url-pattern>/oauth2callback</url-pattern>
 	</servlet-mapping>
-	<servlet>
-        <servlet-name>CheckLogin</servlet-name>
-        <servlet-class>com.ciandt.gcc.CheckLogin</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>CheckLogin</servlet-name>
-        <url-pattern>/CheckLogin</url-pattern>
-    </servlet-mapping>  
 </web-app>
