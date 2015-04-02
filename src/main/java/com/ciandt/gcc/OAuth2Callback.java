@@ -15,6 +15,8 @@ import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactFeed;
 import com.google.gdata.client.Query;
 import com.google.gdata.data.contacts.ContactEntry;
+import com.google.gdata.data.extensions.Name;
+import com.google.gdata.data.extensions.Email;
 
 
 public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackServlet {
@@ -45,6 +47,7 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
     
     try {
         
+        
         URL feedUrl = new URL(FEED_URL_CONTACTS);
         
         Query myQuery = new Query(feedUrl);
@@ -53,10 +56,38 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
         ContactFeed resultFeed = contactsService.query(myQuery, ContactFeed.class);
 
         for (ContactEntry entry : resultFeed.getEntries()) {
+            
+            
+            if(entry.hasName()){
+                
+                Name name = entry.getName();
+                String fullName = name.getFullName().getValue();
+                
+                if(name.getFullName().hasYomi()){
+                    
+                    fullName += " (" + name.getFullName().getYomi() + ")";
+                    
+                }
+                
+                
+                for (Email mail : entry.getEmailAddresses()) {
+                    
+                    
+                    String contatcts = ("\n" + fullName + " " + "-" + " " + mail.getAddress());
+                    
+                    Entity contacts = new Entity("contatcts", contatcts);
+                    
+                    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+                    datastore.put(contacts);
+                }
+                
+            
+            }else{
+                
+                System.out.println("Not FullName");
+            }
 
-            System.out.println(entry.getTitle().getPlainText());
-        
-        }
+        }    
 
     } catch (Exception e) {
         System.out.println(e);
