@@ -27,6 +27,7 @@ public class RetrievingContacts {
             
             e.printStackTrace();
         }
+        
     }
 
 }

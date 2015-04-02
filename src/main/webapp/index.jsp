@@ -52,7 +52,7 @@
             </div>
             <div class="button-accept">
                 <button id="authorize-button" class="btn btn-sm btn-success"><i class="text-button fa fa-check-square-o fa-lg"></i>Agree</button>
-                <a href="retrievingcontacts"><button class="btn btn-sm btn-danger"><i class="text-button fa fa-times fa-lg"></i>Disagree</button></a>
+                <button class="btn btn-sm btn-danger"><i class="text-button fa fa-times fa-lg"></i>Disagree</button>
             </div>
             <div class="footer">
                 <span><img class="icon-ciandt" src="img/ciandt.png"/></span><span class="aling-text-footer"><label class="text-footer">- All Rights Reserved CI&T</label></span>
@@ -60,5 +60,36 @@
         </div>
         <div class="col-xs-3 col-sm3 col-lg-4"></div>
     </div>
-</body>
+    <!-- Modal Authorization Success-->
+	<div id="authorizationsuccess" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <label class="text-success modal-title" id="myModalLabel">Authorization Success</label>
+	      </div>
+	      <div class="text-default modal-body">
+	        <i class="text-button fa fa-check-square-o fa-lg"></i>Approved authorization request
+	      </div>
+	      <div class="modal-footer">
+	      </div>
+	    </div>
+	  </div>
+    </div>
+    <!-- Modal Authorization denied-->
+    <div id="authorizationdenied" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <label class="text-dined modal-title" id="myModalLabel">Authorization denied</label>
+          </div>
+          <div class="text-default modal-body">
+               <i class="text-button fa fa-times fa-lg"></i>Authorization request denied
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
 </html>
