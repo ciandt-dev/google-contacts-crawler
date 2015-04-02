@@ -2,6 +2,7 @@ package com.ciandt.gcc;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,6 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gdata.client.contacts.ContactsService;
 import com.google.gdata.data.contacts.ContactFeed;
-import com.google.gdata.client.Query;
 import com.google.gdata.data.contacts.ContactEntry;
 import com.google.gdata.data.extensions.Name;
 import com.google.gdata.data.extensions.Email;
@@ -38,8 +38,10 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
     user.setProperty("refreshToken", credential.getRefreshToken());
     
     
-    /*DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(user);*/
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Key userKey = user.getKey();
+    datastore.put(user);
+    
     
     ContactsService contactsService = new ContactsService("Lasso Project");
     contactsService.setHeader("Authorization", "Bearer " + credential.getAccessToken());
@@ -50,7 +52,7 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
         
         URL feedUrl = new URL(FEED_URL_CONTACTS);
         
-        Query myQuery = new Query(feedUrl);
+        com.google.gdata.client.Query myQuery = new com.google.gdata.client.Query(feedUrl);
         myQuery.setMaxResults(MAX_RESULTS);
 
         ContactFeed resultFeed = contactsService.query(myQuery, ContactFeed.class);
@@ -63,28 +65,39 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
                 Name name = entry.getName();
                 String fullName = name.getFullName().getValue();
                 
-                if(name.getFullName().hasYomi()){
+                    if(name.getFullName().hasYomi()){
+                        
+                        fullName += " (" + name.getFullName().getYomi() + ")";
+                        
+                    }
+
                     
-                    fullName += " (" + name.getFullName().getYomi() + ")";
+                    for (Email mail : entry.getEmailAddresses()) {
+
+
+                        String contactMail = mail.getAddress();
+                        String contactName = fullName;
+                        
+
+                        Entity contacts = new Entity("Contacts", contactMail, userKey);
+                        contacts.setProperty("Name", contactName);
+
+                        DatastoreService datastores = DatastoreServiceFactory.getDatastoreService();
+                        datastores.put(contacts);
                     
+                        //Example Query results mail contacts with related ancestor
+                        
+                        Query photoQuery = new Query("Contacts").setAncestor(userKey); 
+                        
+                        List<Entity> results = datastore.prepare(photoQuery).asList(FetchOptions.Builder.withDefaults());
+                        
+                        System.out.println(results);
                 }
-                
-                
-                for (Email mail : entry.getEmailAddresses()) {
-                    
-                    
-                    String contatcts = ("\n" + fullName + " " + "-" + " " + mail.getAddress());
-                    
-                    Entity contacts = new Entity("contatcts", contatcts);
-                    
-                    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-                    datastore.put(contacts);
-                }
-                
+               
             
             }else{
                 
-                System.out.println("Not FullName");
+                //System.out.println("Not FullName");
             }
 
         }    
