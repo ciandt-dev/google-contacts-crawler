@@ -32,10 +32,10 @@ var app = {
 	},
 	
 	notAuthorized: function() {
-		alert('Not Authorized!');
+		$("#authorizationsuccess").modal('show');
 	},
 	
 	authorizationSuccess: function() {
-		alert('Authorization Success!');
+		$("#authorizationsuccess").modal('show');
 	}
 };
