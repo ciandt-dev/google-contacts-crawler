@@ -14,24 +14,23 @@ import com.google.appengine.api.users.UserServiceFactory;
 public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackServlet {
 
   private static final long serialVersionUID = 1L;
-  
+
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
       throws ServletException, IOException {
-    
+
     String email = UserServiceFactory.getUserService().getCurrentUser().getEmail();
-    
     long expireTime = (System.currentTimeMillis() / 1000L) + credential.getExpiresInSeconds();
-        
+
     Entity user = new Entity("User", email);
     user.setProperty("accessToken", credential.getAccessToken());
     user.setProperty("expireTime", expireTime);
     user.setProperty("refreshToken", credential.getRefreshToken());
     user.setProperty("imported", false);
-    
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(user);
   }
-    
+
   @Override
   protected void onError(
       HttpServletRequest req, HttpServletResponse resp, AuthorizationCodeResponseUrl errorResponse)
@@ -52,4 +51,3 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
     return OAuthUtils.newFlow();
   }
 }
-

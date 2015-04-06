@@ -24,6 +24,7 @@ public class ImportContacts extends HttpServlet {
   private static final Logger log = Logger.getLogger(Cron.class.getName());
   private static final Integer MAX_RESULTS = 99999;
   private static final String FEED_URL_CONTACTS = "https://www.google.com/m8/feeds/contacts/default/full";
+  private static final String[] filterDomains = {"ciandt"};
   
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -31,6 +32,7 @@ public class ImportContacts extends HttpServlet {
       log.info("Enqueued task started for user: " + req.getParameter("user_email"));
       log.info("Parent Key: " + req.getParameter("userKey"));
       log.info("Access Token: " + req.getParameter("accessToken"));
+      
       
       String accessToken = req.getParameter("accessToken");   
       String applicationName = "ciandt-google-contacts-crawler";
@@ -40,6 +42,7 @@ public class ImportContacts extends HttpServlet {
       contactsService.setHeader("Authorization", "Bearer " + accessToken);
            
       try {
+          
           URL feedUrl = new URL(FEED_URL_CONTACTS);
           
           Query q = new Query(feedUrl);
@@ -59,17 +62,40 @@ public class ImportContacts extends HttpServlet {
                   String contactAddress = mail.getAddress();
                   String contactName = fullName;
 
+                  
+                  if(this.domainIgnoredList(contactAddress)){
+                      
+                      if(true){
+                          continue;
+                      }
+                  }
+                  
+                  
                   Entity contact = new Entity("Contact", contactAddress, userKey);
                   contact.setProperty("name", contactName);
 
                   DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
                   datastore.put(contact);
-                  log.info("Inserted contact: " + contactAddress);
+                  log.info("Inserted contact: " + contactAddress); 
+                  
               }
-          }    
-
+          }   
       } catch (Exception e) {
           System.out.println(e);
       }
   }
+  
+  public boolean domainIgnoredList(String contacts){
+      
+      for (String domains : filterDomains) {
+        
+          if(contacts.contains(domains)){
+             
+              return true;
+          }
+      }
+      
+      return false;
+      
+    }
 }
