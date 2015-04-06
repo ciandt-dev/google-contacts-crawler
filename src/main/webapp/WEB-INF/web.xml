@@ -39,15 +39,6 @@
     <servlet-name>ImportContacts</servlet-name>
     <url-pattern>/import</url-pattern>
   </servlet-mapping>
-	<security-constraint>
-      <web-resource-collection>
-          <web-resource-name>app</web-resource-name>
-         <url-pattern>/*</url-pattern>
-      </web-resource-collection>
-      <auth-constraint>
-          <role-name>*</role-name>
-      </auth-constraint>
-  </security-constraint>
   <security-constraint>
       <web-resource-collection>
           <web-resource-name>import_cron</web-resource-name>
