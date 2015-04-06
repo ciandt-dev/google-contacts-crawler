@@ -16,12 +16,12 @@ public class AuthorizeServlet extends AbstractAppEngineAuthorizationCodeServlet 
     @Override
     protected String getRedirectUri(HttpServletRequest req)
             throws ServletException, IOException {
-        return Utils.getRedirectUri(req);
+        return OAuthUtils.getRedirectUri(req);
     }
 
     @Override
     protected AuthorizationCodeFlow initializeFlow() throws IOException {
-        return Utils.newFlow();
+        return OAuthUtils.newFlow();
     }
 
 }
