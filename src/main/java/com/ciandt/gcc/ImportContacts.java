@@ -22,7 +22,7 @@ import com.google.gdata.client.*;
 public class ImportContacts extends HttpServlet {
   
   private static final Logger log = Logger.getLogger(Cron.class.getName());
-  private static final Integer MAX_RESULTS = 1000;
+  private static final Integer MAX_RESULTS = 99999;
   private static final String FEED_URL_CONTACTS = "https://www.google.com/m8/feeds/contacts/default/full";
   
   @Override
