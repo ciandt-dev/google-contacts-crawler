@@ -24,8 +24,7 @@ public class ImportContacts extends HttpServlet {
   private static final Logger log = Logger.getLogger(Cron.class.getName());
   private static final Integer MAX_RESULTS = 99999;
   private static final String FEED_URL_CONTACTS = "https://www.google.com/m8/feeds/contacts/default/full";
-  private static final String[] filterDomains = {"ciandt"};
-    
+
   
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -92,7 +91,7 @@ public class ImportContacts extends HttpServlet {
   public boolean domainIgnoredList(String contacts) throws IOException{
       
       
-      for (String domains : filterDomains) {
+      for (String domains : ReaderPropertiesDomains.getProperties()) {
         
           if(contacts.contains(domains)){
              

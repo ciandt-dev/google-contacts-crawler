@@ -9,10 +9,10 @@ public class ReaderPropertiesDomains {
     private static final String PATH_PROPERTIES = "domains.properties";
     private static final String KEY_DOMAINS = "domains";
 
-    public String[] getProperties() throws IOException {
+    public static String[] getProperties() throws IOException {
 
         Properties propertiesDomains = new Properties();
-        InputStream readerDomains = this.getClass().getClassLoader()
+        InputStream readerDomains = ReaderPropertiesDomains.class.getClassLoader()
                 .getResourceAsStream(PATH_PROPERTIES);
 
         try {
