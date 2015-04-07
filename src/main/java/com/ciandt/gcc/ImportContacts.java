@@ -25,10 +25,7 @@ public class ImportContacts extends HttpServlet {
   private static final Integer MAX_RESULTS = 99999;
   private static final String FEED_URL_CONTACTS = "https://www.google.com/m8/feeds/contacts/default/full";
   private static final String[] filterDomains = {"ciandt"};
-<<<<<<< HEAD
-  
-=======
->>>>>>> 5b1267e0d1c0aa43640e0599dc00d976187f99e9
+    
   
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -37,12 +34,11 @@ public class ImportContacts extends HttpServlet {
       log.info("Parent Key: " + req.getParameter("userKey"));
       log.info("Access Token: " + req.getParameter("accessToken"));
       
-      
       String accessToken = req.getParameter("accessToken");   
       String applicationName = "ciandt-google-contacts-crawler";
       ContactsService contactsService = new ContactsService(applicationName);
       contactsService.getRequestFactory().setHeader("User-Agent", applicationName);
-      //contactsService.setUserToken(accessToken);
+      //contactsService.setUserToken(accessToken); whatever
       contactsService.setHeader("Authorization", "Bearer " + accessToken);
            
       try {
@@ -82,6 +78,10 @@ public class ImportContacts extends HttpServlet {
                   datastore.put(contact);
                   log.info("Inserted contact: " + contactAddress); 
                   
+                
+                  User updateUser = new User();
+                  updateUser.setUser(userKey);
+                  
               }
           }   
       } catch (Exception e) {
@@ -89,7 +89,8 @@ public class ImportContacts extends HttpServlet {
       }
   }
   
-  public boolean domainIgnoredList(String contacts){
+  public boolean domainIgnoredList(String contacts) throws IOException{
+      
       
       for (String domains : filterDomains) {
         

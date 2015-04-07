@@ -4,14 +4,24 @@ import com.google.appengine.api.datastore.*;
 
 public class User {
  
-    public void queryUser(String key){
+    private static final boolean flagImported = true;
+    
+    public void setUser(Key key){
+       
+        try {
+            
+            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+            
+            Entity user = datastore.get(key);
+            user = datastore.get(user.getKey());
+            user.setProperty("imported", flagImported);
+            datastore.put(user);
         
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        
-        Query userQuery = new Query(key);
-        PreparedQuery preparedUserQuery = datastore.prepare(userQuery);
-        
-        System.out.println(preparedUserQuery);
+        } catch (EntityNotFoundException e) {
+
+            e.printStackTrace();
+        }
+
         
     }
 
