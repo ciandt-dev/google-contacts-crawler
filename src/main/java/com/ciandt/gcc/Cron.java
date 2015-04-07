@@ -35,15 +35,18 @@ public class Cron extends HttpServlet {
       log.info("Queried for User entities pending importation.");
       
       for (Entity entity : results) {
+       
+        String newUserToken = OAuthUtils.getAccessToken(entity);
         String user_email = entity.getKey().getName();
         log.info("User: " + user_email);
+        log.info("RefreshToken: " + newUserToken);
         Key key = entity.getKey();
         String serializedKey = KeyFactory.keyToString(key);
         // Add the task to the default queue.
         Queue queue = QueueFactory.getDefaultQueue();
         queue.add(TaskOptions.Builder.withUrl("/import")
             .param("user_email", user_email)
-            .param("accessToken", (String) entity.getProperty("accessToken")) 
+            .param("accessToken", (String) entity.getProperty(newUserToken)) 
             .param("userKey", serializedKey)
             .method(Method.POST));
       }

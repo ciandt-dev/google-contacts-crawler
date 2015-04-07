@@ -39,12 +39,12 @@ public class OAuthUtils {
                 .setAccessType("offline").setApprovalPrompt("force").build();
     }
     
-    protected boolean accessTokenHasExpired(Entity user) {
+    static boolean accessTokenHasExpired(Entity user) {
         Date expireDate = new Date((Long) user.getProperty("expireTime"));
         return expireDate.before(new Date());
     }
     
-    protected void refreshAccessToken(Entity user) throws IOException {
+    static void refreshAccessToken(Entity user) throws IOException {
         HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
         JsonFactory JSON_FACTORY = new JacksonFactory();
         Reader reader = new InputStreamReader(OAuthUtils.class.getResourceAsStream(CLIENTSECRETS_LOCATION));
@@ -59,9 +59,9 @@ public class OAuthUtils {
         credential.setRefreshToken((String) user.getProperty("refreshToken"));
     }
     
-    protected String getAccessToken(Entity user) throws IOException {
-        if (this.accessTokenHasExpired(user)) {
-            this.refreshAccessToken(user);
+    static String getAccessToken(Entity user) throws IOException {
+        if (OAuthUtils.accessTokenHasExpired(user)) {
+            OAuthUtils.refreshAccessToken(user);
         }
         return OAuthUtils.credential.getAccessToken();
     }
