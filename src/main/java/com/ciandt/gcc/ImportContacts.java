@@ -25,7 +25,10 @@ public class ImportContacts extends HttpServlet {
   private static final Integer MAX_RESULTS = 99999;
   private static final String FEED_URL_CONTACTS = "https://www.google.com/m8/feeds/contacts/default/full";
   private static final String[] filterDomains = {"ciandt"};
+<<<<<<< HEAD
   
+=======
+>>>>>>> 5b1267e0d1c0aa43640e0599dc00d976187f99e9
   
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
