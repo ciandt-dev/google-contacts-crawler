@@ -35,8 +35,8 @@
 </head>
 <body>
 	<div class="container">
-        <div class="col-xs-3 col-sm-3 col-lg-4"></div>
-        <div class="style-box col-xs-4 col-sm-4 col-lg-4">
+        <div class="col-xs-1 col-sm-2 col-md-3 col-lg-4"></div>
+        <div class="style-box col-xs-10 col-sm-8 col-md-6 col-lg-4">
             <div class="title">
                 <span><img class="icon" src="img/groups.png" /><label class="title"><span class="ini-title">C</span>ontacts Shared</label></span>
             </div>
@@ -58,7 +58,7 @@
                 <span><img class="icon-ciandt" src="img/ciandt.png"/></span><span class="aling-text-footer"><label class="text-footer">- All Rights Reserved CI&T</label></span>
             </div>
         </div>
-        <div class="col-xs-3 col-sm3 col-lg-4"></div>
+        <div class="col-xs-1 col-sm-2 col-md-4 col-lg-4"></div>
     </div>
     <!-- Modal Authorization Success-->
 	<div id="authorizationsuccess" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

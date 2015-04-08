@@ -1,6 +1,14 @@
 package com.ciandt.gcc;
 
-import com.google.appengine.api.datastore.*;
+import java.util.List;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.Query;
 
 public class User {
  
@@ -38,6 +46,18 @@ public class User {
             e.printStackTrace();
         }
 
+        
+    }
+    
+    
+    public List<Entity> QueryContactsAncestor(Key ancestorKey){
+        
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        
+        Query ancestorQuery = new Query("User").setAncestor(ancestorKey); 
+        List<Entity> results = datastore.prepare(ancestorQuery).asList(FetchOptions.Builder.withDefaults());
+        
+        return results;
         
     }
     
