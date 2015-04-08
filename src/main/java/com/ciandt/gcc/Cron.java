@@ -24,11 +24,12 @@ public class Cron extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp)
       throws IOException, ServletException {
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();      
       Filter propertyFilter =
           new FilterPredicate("imported",
                               FilterOperator.EQUAL,
                               false);
+
       Query q = new Query("User").setFilter(propertyFilter);
       List<Entity> results = datastore.prepare(q)
           .asList(FetchOptions.Builder.withDefaults());
@@ -36,17 +37,23 @@ public class Cron extends HttpServlet {
       
       for (Entity entity : results) {
        
-        String newUserToken = OAuthUtils.getAccessToken(entity);
+        Key key = entity.getKey(); 
         String user_email = entity.getKey().getName();
-        log.info("User: " + user_email);
-        log.info("RefreshToken: " + newUserToken);
-        Key key = entity.getKey();
+        log.info("User: " + user_email);    
         String serializedKey = KeyFactory.keyToString(key);
+        
+        //Refresh AccessToken
+        String accessToken = OAuthUtils.getAccessToken(entity);
+        long ExpireTime  = OAuthUtils.getExpiresTime(entity);
+        log.info("New Acess Token: " + accessToken); 
+        User setNewAcessToken = new User();
+        setNewAcessToken.setAcessToken(key, accessToken, ExpireTime);
+        
         // Add the task to the default queue.
         Queue queue = QueueFactory.getDefaultQueue();
         queue.add(TaskOptions.Builder.withUrl("/import")
             .param("user_email", user_email)
-            .param("accessToken", (String) entity.getProperty(newUserToken)) 
+            .param("accessToken", accessToken) 
             .param("userKey", serializedKey)
             .method(Method.POST));
       }

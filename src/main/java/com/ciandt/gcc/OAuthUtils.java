@@ -55,8 +55,9 @@ public class OAuthUtils {
             .setJsonFactory(JSON_FACTORY)
             .setClientSecrets(clientSecrets)
             .build();
-       
-        credential.setRefreshToken((String) user.getProperty("refreshToken"));
+        
+        OAuthUtils.credential.setRefreshToken((String) user.getProperty("refreshToken"));
+        OAuthUtils.credential.refreshToken();
     }
     
     static String getAccessToken(Entity user) throws IOException {
@@ -64,5 +65,10 @@ public class OAuthUtils {
             OAuthUtils.refreshAccessToken(user);
         }
         return OAuthUtils.credential.getAccessToken();
+    }
+    
+    static long getExpiresTime(Entity user) throws IOException {
+        
+        return (System.currentTimeMillis() / 1000L) + OAuthUtils.credential.getExpiresInSeconds();           
     }
 }

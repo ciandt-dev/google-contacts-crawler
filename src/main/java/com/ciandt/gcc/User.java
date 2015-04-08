@@ -4,17 +4,14 @@ import com.google.appengine.api.datastore.*;
 
 public class User {
  
-    private static final boolean flagImported = true;
-    
-    public void setUser(Key key){
+    public void setFlagImportedContacts(Key key, boolean valueFlag){
        
         try {
             
             DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
             
             Entity user = datastore.get(key);
-            user = datastore.get(user.getKey());
-            user.setProperty("imported", flagImported);
+            user.setProperty("imported", valueFlag);
             datastore.put(user);
         
         } catch (EntityNotFoundException e) {
@@ -24,5 +21,26 @@ public class User {
 
         
     }
+    
+    public void setAcessToken(Key key, String newToken, long newTime){
+
+        try {
+            
+            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+            
+            Entity user = datastore.get(key);
+            user.setProperty("accessToken", newToken);
+            user.setProperty("expireTime", newTime);
+            datastore.put(user);
+        
+        } catch (EntityNotFoundException e) {
+
+            e.printStackTrace();
+        }
+
+        
+    }
+    
+
 
 }

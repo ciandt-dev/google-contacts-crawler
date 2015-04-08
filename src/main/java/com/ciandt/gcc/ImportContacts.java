@@ -24,6 +24,7 @@ public class ImportContacts extends HttpServlet {
   private static final Logger log = Logger.getLogger(Cron.class.getName());
   private static final Integer MAX_RESULTS = 99999;
   private static final String FEED_URL_CONTACTS = "https://www.google.com/m8/feeds/contacts/default/full";
+  private static final boolean flagImported = true;
 
   
   @Override
@@ -78,8 +79,8 @@ public class ImportContacts extends HttpServlet {
                   log.info("Inserted contact: " + contactAddress); 
                   
                 
-                  User updateUser = new User();
-                  updateUser.setUser(userKey);
+                  User setFlagUser = new User();
+                  setFlagUser.setFlagImportedContacts(userKey, flagImported);
                   
               }
           }   
