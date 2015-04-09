@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
+
 @SuppressWarnings("serial")
 public class SendContacts extends HttpServlet{
 
@@ -16,20 +18,20 @@ public class SendContacts extends HttpServlet{
         String reqUser = req.getParameter("contact");
         String setMail = "@";
         
+        User user = new User();
         
         if(reqUser.contains(setMail)){
-        
-            User user = new User();
-            user.QueryContactsAncestor(reqUser);
-            
-            resp.getWriter().println(user.QueryContactsAncestor(reqUser));
+
+        user.QueryContactsAncestor(reqUser);
+
 
         }else if(reqUser.equals("all")){
             
-            User user = new User();
+        try {
             user.QueryContacts();
-            
-            resp.getWriter().println(user.QueryContacts());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
             
         }else{
              
