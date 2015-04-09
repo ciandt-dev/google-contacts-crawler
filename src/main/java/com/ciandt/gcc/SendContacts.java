@@ -18,29 +18,41 @@ public class SendContacts extends HttpServlet{
         String reqUser = req.getParameter("contact");
         String setMail = "@";
         
-        User user = new User();
         
-        if(reqUser.contains(setMail)){
-
-       try {
-           resp.getWriter().println(user.QueryContactsAncestor(reqUser));
-       } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        
-
-        }else if(reqUser.equals("all")){
+        if(reqUser.equals(null)){
             
-        try {
-            resp.getWriter().println(user.QueryContacts());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            resp.getWriter().println("Null Parameter");
             
         }else{
-             
-            resp.getWriter().println("Invalid Parameter");
+            
+            User user = new User();
+            
+            if(reqUser.contains(setMail)){
+
+           try {
+               resp.getWriter().println(user.QueryContactsAncestor(reqUser));
+           } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            
+
+            }else if(reqUser.equals("all")){
+                
+            try {
+                resp.getWriter().println(user.QueryContacts());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+                
+            }else{
+                 
+                resp.getWriter().println("Invalid Parameter");
+            }
+            
         }
+        
+        
+       
         
     }
 }
