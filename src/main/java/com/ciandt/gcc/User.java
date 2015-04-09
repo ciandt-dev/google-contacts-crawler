@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -53,7 +54,7 @@ public class User {
 
     }
 
-    public JSONArray QueryContactsAncestor(String userEmail) {
+    public JSONArray QueryContactsAncestor(String userEmail) throws JSONException {
 
         DatastoreService datastore = DatastoreServiceFactory
                 .getDatastoreService();
@@ -64,11 +65,19 @@ public class User {
         List<Entity> results = datastore.prepare(ancestorQuery).asList(
                 FetchOptions.Builder.withDefaults());
 
-        JSONArray jsonResponseArray = new JSONArray();
-        jsonResponseArray.put(results);
+         JSONArray jsonResponseArray = new JSONArray();
+        
+        
+        for(Entity contact : results){
+            
+            JSONObject contactJson = new JSONObject();
+            contactJson.put("name", contact.getProperty("name"));
+            contactJson.put("mail", contact.getKey().getName());
 
+            jsonResponseArray.put(contactJson);
+        }
+        
         return jsonResponseArray;
-
     }
 
     public JSONArray QueryContacts() throws JSONException {
@@ -79,9 +88,18 @@ public class User {
         Query ancestorQuery = new Query("Contact");
         List<Entity> results = datastore.prepare(ancestorQuery).asList(
                 FetchOptions.Builder.withDefaults());
-
+        
         JSONArray jsonResponseArray = new JSONArray();
-        jsonResponseArray.put(results);
+        
+        
+        for(Entity contact : results){
+            
+            JSONObject contactJson = new JSONObject();
+            contactJson.put("name", contact.getProperty("name"));
+            contactJson.put("mail", contact.getKey().getName());
+
+            jsonResponseArray.put(contactJson);
+        }
 
         return jsonResponseArray;
 

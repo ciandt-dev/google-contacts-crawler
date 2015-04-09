@@ -22,13 +22,17 @@ public class SendContacts extends HttpServlet{
         
         if(reqUser.contains(setMail)){
 
-        user.QueryContactsAncestor(reqUser);
-
+       try {
+           resp.getWriter().println(user.QueryContactsAncestor(reqUser));
+       } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        
 
         }else if(reqUser.equals("all")){
             
         try {
-            user.QueryContacts();
+            resp.getWriter().println(user.QueryContacts());
         } catch (JSONException e) {
             e.printStackTrace();
         }
