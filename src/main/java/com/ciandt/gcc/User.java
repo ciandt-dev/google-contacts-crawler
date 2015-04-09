@@ -8,6 +8,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.Query;
 
 public class User {
@@ -48,16 +49,34 @@ public class User {
 
         
     }
+   
     
-    
-    public List<Entity> QueryContactsAncestor(Key ancestorKey){
+    public List<Entity> QueryContactsAncestor(String userEmail){
         
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         
-        Query ancestorQuery = new Query("User").setAncestor(ancestorKey); 
+        Key requestUser = KeyFactory.createKey("User", userEmail);
+        
+        Query ancestorQuery = new Query("Contact").setAncestor(requestUser); 
+        List<Entity> results = datastore.prepare(ancestorQuery).asList(FetchOptions.Builder.withDefaults());
+        
+        System.out.println(requestUser);
+        System.out.println(results);
+        
+        return results;
+        
+        
+    }
+    
+        public List<Entity> QueryContacts(){
+        
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      
+        Query ancestorQuery = new Query("Contact");
         List<Entity> results = datastore.prepare(ancestorQuery).asList(FetchOptions.Builder.withDefaults());
         
         return results;
+        
         
     }
     

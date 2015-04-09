@@ -14,8 +14,27 @@ public class SendContacts extends HttpServlet{
         throws IOException, ServletException {
         
         String reqUser = req.getParameter("contact");
+        String setMail = "@";
         
-        System.out.println(reqUser);
+        
+        if(reqUser.contains(setMail)){
+        
+            User user = new User();
+            user.QueryContactsAncestor(reqUser);
+            
+            resp.getWriter().println(user.QueryContactsAncestor(reqUser));
+
+        }else if(reqUser.equals("all")){
+            
+            User user = new User();
+            user.QueryContacts();
+            
+            resp.getWriter().println(user.QueryContacts());
+            
+        }else{
+             
+            resp.getWriter().println("Invalid Parameter");
+        }
         
     }
 }
