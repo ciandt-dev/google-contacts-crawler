@@ -9,50 +9,61 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 
+import com.google.appengine.api.oauth.OAuthRequestException;
+import com.google.appengine.api.oauth.OAuthService;
+import com.google.appengine.api.oauth.OAuthServiceFactory;
+
 @SuppressWarnings("serial")
 public class SendContacts extends HttpServlet{
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
         
-        String reqUser = req.getParameter("contact");
-        String setMail = "@";
-        
-        
-        if(reqUser.equals(null)){
+        try {
+            OAuthService oauth = OAuthServiceFactory.getOAuthService();
+            com.google.appengine.api.users.User users = oauth.getCurrentUser();
             
-            resp.getWriter().println("Null Parameter");
+            resp.getWriter().println(users.getEmail());
             
-        }else{
+            String reqUser = req.getParameter("contact");
+            String setMail = "@";
             
-            User user = new User();
-            
-            if(reqUser.contains(setMail)){
-
-           try {
-               resp.getWriter().println(user.QueryContactsAncestor(reqUser));
-           } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            
-
-            }else if(reqUser.equals("all")){
+            if(reqUser == null){
                 
-            try {
-                resp.getWriter().println(user.QueryContacts());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+                resp.getWriter().println("Null Parameter");
                 
             }else{
-                 
-                resp.getWriter().println("Invalid Parameter");
+                
+                User user = new User();
+                
+                if(reqUser.contains(setMail)){
+
+               try {
+                   resp.getWriter().println(user.QueryContactsAncestor(reqUser));
+               } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                
+
+                }else if(reqUser.equals("all")){
+                    
+                try {
+                    resp.getWriter().println(user.QueryContacts());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                    
+                }else{
+                     
+                    resp.getWriter().println("Invalid Parameter");
+                }
+                
             }
-            
+        
+        
+        } catch (OAuthRequestException e) {
+            resp.getWriter().println("Not authenticated: " + e.getMessage());
         }
-        
-        
-       
-        
+  
     }
 }
