@@ -15,10 +15,18 @@ public class SendContacts extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
 
-    
+        String resKey = "123";
+        String key = req.getHeader("Authorization");
+        resp.setContentType("application/json");
         
-        String reqUser = req.getParameter("contact");
-        String setMail = "@";
+        if(!key.equals(resKey)){
+            
+            resp.getWriter().println("Unauthorized");
+        
+        }else{
+        
+            String reqUser = req.getParameter("contact");
+            String setMail = "@";
 
         if (reqUser == null) {
 
@@ -52,6 +60,6 @@ public class SendContacts extends HttpServlet {
 
         }
     }
-
+    }
 }
 

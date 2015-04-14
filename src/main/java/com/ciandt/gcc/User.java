@@ -117,7 +117,7 @@ public class User {
             }
             
             
-            userJson.put("Contacts:", list);
+            userJson.put("Contacts", list);
             
             jsonResponseArray.put(userJson);
             
