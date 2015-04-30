@@ -1,4 +1,4 @@
-package com.ciandt.gcc;
+package com.ciandt.gcc.auth;
 
 import java.io.IOException;
 

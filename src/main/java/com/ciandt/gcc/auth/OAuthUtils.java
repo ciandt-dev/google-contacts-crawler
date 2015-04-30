@@ -1,4 +1,4 @@
-package com.ciandt.gcc;
+package com.ciandt.gcc.auth;
 
 import java.io.*;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class OAuthUtils {
         return expireDate.before(new Date());
     }
     
-    static void refreshAccessToken(Entity user) throws IOException {
+    public static void refreshAccessToken(Entity user) throws IOException {
         HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
         JsonFactory JSON_FACTORY = new JacksonFactory();
         Reader reader = new InputStreamReader(OAuthUtils.class.getResourceAsStream(CLIENTSECRETS_LOCATION));
@@ -60,14 +60,14 @@ public class OAuthUtils {
         OAuthUtils.credential.refreshToken();
     }
     
-    static String getAccessToken(Entity user) throws IOException {
+    public static String getAccessToken(Entity user) throws IOException {
         if (OAuthUtils.accessTokenHasExpired(user)) {
             OAuthUtils.refreshAccessToken(user);
         }
         return OAuthUtils.credential.getAccessToken();
     }
     
-    static long getExpiresTime(Entity user) throws IOException {
+    public static long getExpiresTime(Entity user) throws IOException {
         
         return (System.currentTimeMillis() / 1000L) + OAuthUtils.credential.getExpiresInSeconds();           
     }

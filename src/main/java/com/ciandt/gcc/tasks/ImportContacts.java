@@ -1,4 +1,4 @@
-package com.ciandt.gcc;
+package com.ciandt.gcc.tasks;
 
 import java.io.IOException;
 import java.net.URL;
@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
+import com.ciandt.gcc.ReaderPropertiesDomains;
+import com.ciandt.gcc.User;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;

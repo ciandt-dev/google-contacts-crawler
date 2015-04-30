@@ -1,4 +1,4 @@
-package com.ciandt.gcc;
+package com.ciandt.gcc.api;
 
 import java.io.IOException;
 
@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
+
+import com.ciandt.gcc.User;
 
 @SuppressWarnings("serial")
 public class SendContacts extends HttpServlet {
