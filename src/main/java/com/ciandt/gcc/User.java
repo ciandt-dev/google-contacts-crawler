@@ -1,5 +1,6 @@
 package com.ciandt.gcc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -85,20 +86,42 @@ public class User {
         DatastoreService datastore = DatastoreServiceFactory
                 .getDatastoreService();
 
-        Query ancestorQuery = new Query("Contact");
-        List<Entity> results = datastore.prepare(ancestorQuery).asList(
+        Query ancestorQueryUser = new Query("User");
+        List<Entity> results = datastore.prepare(ancestorQueryUser).asList(
                 FetchOptions.Builder.withDefaults());
         
         JSONArray jsonResponseArray = new JSONArray();
         
         
-        for(Entity contact : results){
+        for(Entity user : results){
             
-            JSONObject contactJson = new JSONObject();
-            contactJson.put("name", contact.getProperty("name"));
-            contactJson.put("mail", contact.getKey().getName());
-
-            jsonResponseArray.put(contactJson);
+            JSONObject userJson = new JSONObject();
+            userJson.put("mail", user.getKey().getName());
+            
+            Query ancestorQueryContacts = new Query("Contact").setAncestor(user.getKey());
+            List<Entity> resultsContacts = datastore.prepare(ancestorQueryContacts).asList(
+                    FetchOptions.Builder.withDefaults());
+            
+            
+            List<JSONObject> list = new ArrayList<JSONObject>();
+            
+            for(Entity contact : resultsContacts){
+                
+                JSONObject contactJson = new JSONObject();
+                
+                contactJson.put("name", contact.getProperty("name"));
+                contactJson.put("mail", contact.getKey().getName());
+                
+                list.add(contactJson);
+              
+            }
+            
+            
+            userJson.put("Contacts", list);
+            
+            jsonResponseArray.put(userJson);
+            
+            
         }
 
         return jsonResponseArray;

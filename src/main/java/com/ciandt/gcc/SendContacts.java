@@ -10,37 +10,56 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 
 @SuppressWarnings("serial")
-public class SendContacts extends HttpServlet{
+public class SendContacts extends HttpServlet {
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-        throws IOException, ServletException {
-        
-        String reqUser = req.getParameter("contact");
-        String setMail = "@";
-        
-        User user = new User();
-        
-        if(reqUser.contains(setMail)){
+            throws IOException, ServletException {
 
-       try {
-           resp.getWriter().println(user.QueryContactsAncestor(reqUser));
-       } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        String resKey = "123";
+        String key = req.getHeader("Authorization");
+        resp.setContentType("application/json");
         
-
-        }else if(reqUser.equals("all")){
+        if(!key.equals(resKey)){
             
-        try {
-            resp.getWriter().println(user.QueryContacts());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-            
+            resp.getWriter().println("Unauthorized");
+        
         }else{
-             
-            resp.getWriter().println("Invalid Parameter");
-        }
         
+            String reqUser = req.getParameter("contact");
+            String setMail = "@";
+
+        if (reqUser == null) {
+
+            resp.getWriter().println("Null Parameter");
+
+        } else {
+
+            User user = new User();
+
+            if (reqUser.contains(setMail)) {
+
+                try {
+                    resp.getWriter().println(
+                            user.QueryContactsAncestor(reqUser));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else if (reqUser.equals("all")) {
+
+                try {
+                    resp.getWriter().println(user.QueryContacts());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+
+                resp.getWriter().println("Invalid Parameter");
+            }
+
+        }
+    }
     }
 }
+

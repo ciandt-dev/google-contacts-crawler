@@ -20,7 +20,7 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
 
     String email = UserServiceFactory.getUserService().getCurrentUser().getEmail();
     long expireTime = (System.currentTimeMillis() / 1000L) + credential.getExpiresInSeconds();
-
+    
     Entity user = new Entity("User", email);
     user.setProperty("accessToken", credential.getAccessToken());
     user.setProperty("expireTime", expireTime);

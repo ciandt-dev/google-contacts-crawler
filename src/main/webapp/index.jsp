@@ -31,12 +31,13 @@
 	<!-- JavaScript -->
 	<script type="text/JavaScript" src="complements/bootstrap-3.4/js/bootstrap.min.js"></script>
 	<!-- End Bootstrap -->
-
+    <title>Google Contacts Crawler</title>
 </head>
 <body>
-	<div class="container">
-        <div class="col-xs-1 col-sm-2 col-md-3 col-lg-4"></div>
-        <div class="style-box col-xs-10 col-sm-8 col-md-6 col-lg-4">
+	<div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-1 col-sm-1 col-md-3 col-lg-4"></div>
+        <div class="style-box col-xs-10 col-sm-10 col-md-6 col-lg-4">
             <div class="title">
                 <span><img class="icon" src="img/groups.png" /><label class="title"><span class="ini-title">C</span>ontacts Shared</label></span>
             </div>
@@ -58,7 +59,8 @@
                 <span><img class="icon-ciandt" src="img/ciandt.png"/></span><span class="aling-text-footer"><label class="text-footer">- All Rights Reserved CI&T</label></span>
             </div>
         </div>
-        <div class="col-xs-1 col-sm-2 col-md-4 col-lg-4"></div>
+        <div class="col-xs-1 col-sm-1 col-md-4 col-lg-4"></div>
+        </div>
     </div>
     <!-- Modal Authorization Success-->
 	<div id="authorizationsuccess" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

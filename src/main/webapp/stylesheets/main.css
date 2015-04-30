@@ -22,11 +22,12 @@ body {
   body {
     background-image: url(../img/wallpaper-1600.png);
     background-position: center center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-      background-color: #464646;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    background-color: #464646;
   }
+
 }
 
 
@@ -57,7 +58,8 @@ body {
     
     font-family: 'Roboto', sans-serif;
     font-weight: normal;
-    font-size: 25px;
+    font-size: 30px;
+    color: #2d75ed;
 }
 
 .text{
@@ -73,13 +75,12 @@ body {
     color: #909090;
 }
 
-.text-title{
+.title-text{
     
     font-family: 'Roboto', sans-serif;
-    font-weight: normal;
-    font-size: 9px;
-    font-weight: bold;
-    color: red;
+    font-size: 12px;
+    color: #929696;
+
 }
 
 .center-text{
@@ -132,17 +133,17 @@ body {
 }
 
 .text-default{
-	
+    
    font-family: 'Roboto', sans-serif;
    font-weight: normal;
-   font-size: 12px;	
+   font-size: 12px; 
 }
 
 .text-success{
-	font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: normal;
     font-size: 18px;
-	color: #319531;
+    color: #319531;
 }
 
 .text-dined{
