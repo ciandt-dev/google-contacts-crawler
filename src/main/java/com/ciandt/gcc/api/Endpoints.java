@@ -1,67 +1,43 @@
 package com.ciandt.gcc.api;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
-import org.json.JSONException;
+import com.ciandt.gcc.PMF;
+import com.ciandt.gcc.entities.Contact;
+import com.ciandt.gcc.entities.User;
+import com.google.api.server.spi.config.Api;
+import com.google.api.server.spi.config.ApiMethod;
+import com.google.api.server.spi.response.NotFoundException;
 
-import com.ciandt.gcc.User;
-
-@SuppressWarnings("serial")
-public class SendContacts extends HttpServlet {
-
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException, ServletException {
-
-        String resKey = "123";
-        String key = req.getHeader("Authorization");
-        resp.setContentType("application/json");
-        
-        if(!key.equals(resKey)){
-            
-            resp.getWriter().println("Unauthorized");
-        
-        }else{
-        
-            String reqUser = req.getParameter("contact");
-            String setMail = "@";
-
-        if (reqUser == null) {
-
-            resp.getWriter().println("Null Parameter");
-
-        } else {
-
-            User user = new User();
-
-            if (reqUser.contains(setMail)) {
-
-                try {
-                    resp.getWriter().println(
-                            user.QueryContactsAncestor(reqUser));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } else if (reqUser.equals("all")) {
-
-                try {
-                    resp.getWriter().println(user.QueryContacts());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } else {
-
-                resp.getWriter().println("Invalid Parameter");
-            }
-
-        }
-    }
+@Api(
+    name = "gcc",
+    version = "v1",
+    description = "Google Contacts Crawler API",
+    clientIds = {"1049893588094-1dckqbdi19hs0k3qj8vluqt17i90uai3.apps.googleusercontent.com"}
+)
+public class Endpoints {
+ 
+    @ApiMethod(path="contacts")
+    public List<UserBean> getContacts() throws NotFoundException {
+      PersistenceManager pm = PMF.get().getPersistenceManager();
+      
+      Query query = pm.newQuery(User.class);
+      query.setFilter("imported == true");
+      List<User> results = (List<User>) query.execute();
+      List<UserBean> response = new ArrayList<>();
+      
+      for (User user : results) {
+          UserBean userBean = new UserBean();
+          userBean.setEmail(user.getEmail());
+          userBean.setContacts(user.getContacts());
+          response.add(userBean);
+      }
+      
+      return response;
     }
 }
 
