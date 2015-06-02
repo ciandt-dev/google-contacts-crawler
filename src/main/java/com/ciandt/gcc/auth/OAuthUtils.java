@@ -2,7 +2,6 @@ package com.ciandt.gcc.auth;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,7 @@ import com.google.appengine.api.datastore.Entity;
 
 public class OAuthUtils {
     
-    private static final String CLIENTSECRETS_LOCATION = "/client_secrets.json";
+    public static final String CLIENTSECRETS = "/client_secrets.json";
     private static final String REDIRECT_URI = "/oauth2callback";
     private static final List<String> SCOPES = Arrays.asList(
         "https://www.googleapis.com/auth/contacts.readonly");
@@ -32,22 +31,17 @@ public class OAuthUtils {
         HttpTransport httpTransport = new NetHttpTransport();
         JsonFactory jsonFactory = new JacksonFactory();
     
-        Reader reader = new InputStreamReader(OAuthUtils.class.getResourceAsStream(CLIENTSECRETS_LOCATION));
+        Reader reader = new InputStreamReader(OAuthUtils.class.getResourceAsStream(CLIENTSECRETS));
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(new JacksonFactory(), reader);
         return
             new GoogleAuthorizationCodeFlow.Builder(httpTransport, jsonFactory, clientSecrets, SCOPES)
                 .setAccessType("offline").setApprovalPrompt("force").build();
     }
     
-    static boolean accessTokenHasExpired(Entity user) {
-        Date expireDate = new Date((Long) user.getProperty("expireTime"));
-        return expireDate.before(new Date());
-    }
-    
     public static void refreshAccessToken(Entity user) throws IOException {
         HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
         JsonFactory JSON_FACTORY = new JacksonFactory();
-        Reader reader = new InputStreamReader(OAuthUtils.class.getResourceAsStream(CLIENTSECRETS_LOCATION));
+        Reader reader = new InputStreamReader(OAuthUtils.class.getResourceAsStream(CLIENTSECRETS));
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(new JacksonFactory(), reader);
     
         OAuthUtils.credential = new GoogleCredential.Builder()
@@ -58,17 +52,5 @@ public class OAuthUtils {
         
         OAuthUtils.credential.setRefreshToken((String) user.getProperty("refreshToken"));
         OAuthUtils.credential.refreshToken();
-    }
-    
-    public static String getAccessToken(Entity user) throws IOException {
-        if (OAuthUtils.accessTokenHasExpired(user)) {
-            OAuthUtils.refreshAccessToken(user);
-        }
-        return OAuthUtils.credential.getAccessToken();
-    }
-    
-    public static long getExpiresTime(Entity user) throws IOException {
-        
-        return (System.currentTimeMillis() / 1000L) + OAuthUtils.credential.getExpiresInSeconds();           
     }
 }
