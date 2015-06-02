@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
   <cron>
-    <url>/import</url>
-    <description>Import contacts every 2 minutes</description>
-    <schedule>every 2 minutes</schedule>
+    <url>/cron?imported=false</url>
+    <description>Import contacts of new accounts every 5 minutes</description>
+    <schedule>every 5 minutes</schedule>
+  </cron>
+  <cron>
+    <url>/cron?imported=true</url>
+    <description>Re-imports contacts of existing account every Sunday at 2am.</description>
+    <schedule>every sunday 02:00</schedule>
   </cron>
 </cronentries>
