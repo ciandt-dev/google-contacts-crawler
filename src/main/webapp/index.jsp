@@ -39,17 +39,22 @@
             <div class="col-xs-1 col-sm-1 col-md-3 col-lg-4"></div>
         <div class="style-box col-xs-10 col-sm-10 col-md-6 col-lg-4">
             <div class="title">
-                <span><img class="icon" src="img/groups.png" /><label class="title"><span class="ini-title">C</span>ontacts Shared</label></span>
+                <span><img class="icon" src="img/groups.png" /><label class="title"><span class="ini-title">CI&T </span>Contacts Crawler</label></span>
             </div>
             <div class="text">
                 <span><label class="title-text">Authorization Agreement</label></span>
                 <br />
                 <span>
                     <label class="center-text text-required">
-                        Terms.
+                        All your contacts names and email addresses will be imported. 
+                        A contact is any address you've sent or replied an email to.
+                        In order to check your contacts <a href="https://contacts.google.com/" target="_blank">click here.</a>
+                        <br /><br />
+                        Please make sure you are aware of this action.<br />
+                        You can <a href="https://support.google.com/a/answer/2537800" target="_blank">view your security settings and revoke access</a> at anytime. 
                      </label>
                  </span>
-                <span><label class="text-required">You must be logged with your @ciandt.com account.</label></span>
+                <span><label class="text-required"><strong>Make sure you log-in with your @ciandt.com account!</strong></label></span>
             </div>
             <div class="button-accept">
                 <button id="authorize-button" class="btn btn-sm btn-success"><i class="text-button fa fa-check-square-o fa-lg"></i>Agree</button>
