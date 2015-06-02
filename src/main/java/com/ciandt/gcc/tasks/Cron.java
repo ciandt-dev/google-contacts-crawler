@@ -9,56 +9,48 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ciandt.gcc.User;
-import com.ciandt.gcc.auth.OAuthUtils;
+import com.ciandt.gcc.PMF;
+import com.ciandt.gcc.entities.User;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.datastore.Query.*;
+
+import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 @SuppressWarnings("serial")
 public class Cron extends HttpServlet {
   
-  private static final Logger log = Logger.getLogger(Cron.class.getName());
-  
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-      throws IOException, ServletException {
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();      
-      Filter propertyFilter =
-          new FilterPredicate("imported",
-                              FilterOperator.EQUAL,
-                              false);
-
-      Query q = new Query("User").setFilter(propertyFilter);
-      List<Entity> results = datastore.prepare(q)
-          .asList(FetchOptions.Builder.withDefaults());
-      log.info("Queried for User entities pending importation.");
-      
-      for (Entity entity : results) {
-       
-        Key key = entity.getKey(); 
-        String user_email = entity.getKey().getName();
-        log.info("User: " + user_email);    
-        String serializedKey = KeyFactory.keyToString(key);
+    private static final Logger log = Logger.getLogger(Cron.class.getName());
+    
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+        throws IOException, ServletException {
+        PersistenceManager pm = PMF.get().getPersistenceManager();
         
-        //Refresh AccessToken
-        String accessToken = OAuthUtils.getAccessToken(entity);
-        long ExpireTime  = OAuthUtils.getExpiresTime(entity);
-        log.info("New Acess Token: " + accessToken); 
-        User setNewAcessToken = new User();
-        setNewAcessToken.setAcessToken(key, accessToken, ExpireTime);
+        Query query = pm.newQuery(User.class);
+        query.setFilter("imported == " + req.getParameter("imported"));
+        List<User> results = (List<User>) query.execute();
         
-        // Add the task to the default queue.
-        Queue queue = QueueFactory.getDefaultQueue();
-        queue.add(TaskOptions.Builder.withUrl("/import")
-            .param("user_email", user_email)
-            .param("accessToken", accessToken) 
-            .param("userKey", serializedKey)
-            .method(Method.POST));
-      }
-  }
-  
+        if (results.isEmpty()) {
+          pm.close();
+          return;
+        }
+        
+        for (User user : results) {
+            String userEmail = user.getEmail();
+            
+            // Add the task to the default queue.
+            Queue queue = QueueFactory.getDefaultQueue();
+            queue.add(TaskOptions.Builder.withUrl("/import")
+                .param("userEmail", userEmail)
+                .method(Method.POST));
+            
+            log.info("Task enqueued for user : " + userEmail); 
+        }
+        
+        pm.close();
+    }
 }
