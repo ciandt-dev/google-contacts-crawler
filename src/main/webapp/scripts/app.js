@@ -32,7 +32,7 @@ var app = {
 	},
 	
 	notAuthorized: function() {
-		$("#authorizationsuccess").modal('show');
+		$("#authorizationdenied").modal('show');
 	},
 	
 	authorizationSuccess: function() {

@@ -1,76 +1,68 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
-	<servlet>
-		<servlet-name>Authorize</servlet-name>
-		<servlet-class>com.ciandt.gcc.AuthorizeServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Authorize</servlet-name>
-		<url-pattern>/authorize</url-pattern>
-	</servlet-mapping>
-	<security-constraint>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <servlet>
+        <servlet-name>Authorize</servlet-name>
+        <servlet-class>com.ciandt.gcc.auth.AuthorizeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Authorize</servlet-name>
+        <url-pattern>/authorize</url-pattern>
+    </servlet-mapping>
+    <security-constraint>
       <web-resource-collection>
-          <web-resource-name>MySecureResources</web-resource-name>
-          <description>Some Description</description>
+          <web-resource-name>Authorize</web-resource-name>
+          <description>Authorization Flow</description>
           <url-pattern>/authorize</url-pattern>
       </web-resource-collection>
       <auth-constraint>
           <role-name>*</role-name>
       </auth-constraint>
-  </security-constraint>
-	<servlet>
-		<servlet-name>OAuth2Callback</servlet-name>
-		<servlet-class>com.ciandt.gcc.OAuth2Callback</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>OAuth2Callback</servlet-name>
-		<url-pattern>/oauth2callback</url-pattern>
-	</servlet-mapping>
-	<servlet>
-    <servlet-name>ImportContacts</servlet-name>
-    <servlet-class>com.ciandt.gcc.ImportContacts</servlet-class>
+    </security-constraint>
+    <servlet>
+        <servlet-name>OAuth2Callback</servlet-name>
+        <servlet-class>com.ciandt.gcc.auth.OAuth2Callback</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OAuth2Callback</servlet-name>
+        <url-pattern>/oauth2callback</url-pattern>
+    </servlet-mapping>
+    <servlet>
+    <servlet-name>ImportationTask</servlet-name>
+    <servlet-class>com.ciandt.gcc.tasks.ImportationTask</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>ImportContacts</servlet-name>
+    <servlet-name>ImportationTask</servlet-name>
     <url-pattern>/import</url-pattern>
+  </servlet-mapping> 
+  <servlet>
+      <servlet-name>Cron</servlet-name>
+      <servlet-class>com.ciandt.gcc.tasks.Cron</servlet-class>
+  </servlet>
+  <servlet-mapping>
+      <servlet-name>Cron</servlet-name>
+      <url-pattern>/cron</url-pattern>
   </servlet-mapping>
-	<security-constraint>
-      <web-resource-collection>
-          <web-resource-name>app</web-resource-name>
-         <url-pattern>/*</url-pattern>
-      </web-resource-collection>
-      <auth-constraint>
-          <role-name>*</role-name>
-      </auth-constraint>
-  </security-constraint>
-  <security-constraint>
-      <web-resource-collection>
-          <web-resource-name>import_cron</web-resource-name>
-         <url-pattern>/import</url-pattern>
-      </web-resource-collection>
-      <auth-constraint>
-          <role-name>admin</role-name>
-      </auth-constraint>
-  </security-constraint>
-    <servlet>
-        <servlet-name>CheckLogin</servlet-name>
-        <servlet-class>com.ciandt.gcc.CheckLogin</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>CheckLogin</servlet-name>
-        <url-pattern>/CheckLogin</url-pattern>
-    </servlet-mapping>  
-    <servlet>
-        <servlet-name>Cron</servlet-name>
-        <servlet-class>com.ciandt.gcc.Cron</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Cron</servlet-name>
-        <url-pattern>/cron</url-pattern>
-    </servlet-mapping> 
+		 <servlet>
+		  <servlet-name>SystemServiceServlet</servlet-name>
+		  <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+		  <init-param>
+		   <param-name>services</param-name>
+		   <param-value>com.ciandt.gcc.api.Endpoints</param-value>
+		  </init-param>
+		 </servlet>
+		 <servlet-mapping>
+		  <servlet-name>SystemServiceServlet</servlet-name>
+		  <url-pattern>/_ah/spi/*</url-pattern>
+		 </servlet-mapping>
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>everything</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
 </web-app>
