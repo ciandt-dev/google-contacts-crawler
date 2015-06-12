@@ -6,12 +6,6 @@ import java.io.Reader;
 import java.util.Date;
 import java.util.logging.Logger;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.NotPersistent;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
 import com.ciandt.gcc.auth.OAuthUtils;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -19,25 +13,31 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Parent;
 
-@PersistenceCapable
+@Cache
+@Entity
 public class Credential {
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+    @Id Long id;
     
-    @Persistent
-    private String accessToken;
+    @Parent Ref<User> owner;
     
-    @Persistent
-    private String refreshToken;
+    String accessToken;
     
-    @Persistent
-    private long expirationTime;
+    String refreshToken;
     
-    @NotPersistent
-    private static final Logger log = Logger.getLogger(Credential.class.getName());
+    long expirationTime;
+    
+    @Ignore
+    static final Logger log = Logger.getLogger(Credential.class.getName());
+    
+    @SuppressWarnings("unused")
+    private Credential() {}
     
     public Credential(com.google.api.client.auth.oauth2.Credential credential) {  
         this.accessToken = credential.getAccessToken();

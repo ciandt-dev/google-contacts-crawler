@@ -1,37 +1,44 @@
 package com.ciandt.gcc.entities;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jdo.annotations.*;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.annotation.Load;
 
-@SuppressWarnings("serial")
-@PersistenceCapable
-public class User implements Serializable {
-    @PrimaryKey
-    private String email;
-    
-    @Persistent
-    private boolean imported;
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
-    @Persistent(dependent = "true")
-    private Credential credential;
+@Cache
+@Entity
+public class User {
+    @Id String email;
     
-    @Persistent
-    private List<Contact> contacts = new ArrayList<>();
+    @Index boolean imported;
+    
+    @Load Ref<Credential> credential;
+    
+    List<Ref<Contact>> contacts = new ArrayList<Ref<Contact>>();
   
+    @SuppressWarnings("unused")
+    private User() {}
+    
     public User(String email) {
         this.setEmail(email);
     }
 
     public List<Contact> getContacts() {
-        return contacts;
+        return new ArrayList<Contact>(ofy().load().refs(contacts).values());
     }
     
     public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
-        this.imported = true;
+        for (Contact contact : contacts) {
+            ofy().save().entity(contact).now();
+            this.contacts.add(Ref.create(contact));
+        }
     }
 
     public String getEmail() {
@@ -44,10 +51,20 @@ public class User implements Serializable {
     }
 
     public void setCredential(com.google.api.client.auth.oauth2.Credential credential) {
-        this.credential = new Credential(credential);    
+        Credential c = new Credential(credential);
+        ofy().save().entity(c).now();
+        this.credential = Ref.create(c);    
     }
 
     public Credential getCredential() {
-        return this.credential;
+        return this.credential.get();
+    }
+
+    public boolean isImported() {
+      return imported;
+    }
+
+    public void setImported(boolean imported) {
+      this.imported = imported;
     }
 }
