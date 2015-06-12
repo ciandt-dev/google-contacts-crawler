@@ -9,16 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ciandt.gcc.PMF;
+import com.ciandt.gcc.OfyService;
 import com.ciandt.gcc.entities.User;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.appengine.api.taskqueue.TaskOptions.Method;
-import com.google.appengine.api.datastore.*;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
+import com.googlecode.objectify.Objectify;
 
 @SuppressWarnings("serial")
 public class Cron extends HttpServlet {
@@ -28,18 +25,14 @@ public class Cron extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException, ServletException {
-        PersistenceManager pm = PMF.get().getPersistenceManager();
+        Objectify ofy = OfyService.ofy();
+        List<User> users = ofy.load().type(User.class).filter("imported", false).list();
         
-        Query query = pm.newQuery(User.class);
-        query.setFilter("imported == " + req.getParameter("imported"));
-        List<User> results = (List<User>) query.execute();
-        
-        if (results.isEmpty()) {
-          pm.close();
+        if (users.isEmpty()) {
           return;
         }
         
-        for (User user : results) {
+        for (User user : users) {
             String userEmail = user.getEmail();
             
             // Add the task to the default queue.
@@ -50,7 +43,5 @@ public class Cron extends HttpServlet {
             
             log.info("Task enqueued for user : " + userEmail); 
         }
-        
-        pm.close();
     }
 }
