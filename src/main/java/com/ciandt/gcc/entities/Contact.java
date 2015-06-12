@@ -1,26 +1,24 @@
 package com.ciandt.gcc.entities;
 
-import java.io.Serializable;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Parent;
 
-import javax.jdo.annotations.IdGeneratorStrategy;
-import javax.jdo.annotations.PersistenceCapable;
-import javax.jdo.annotations.Persistent;
-import javax.jdo.annotations.PrimaryKey;
-
-import com.google.appengine.api.datastore.Key;
-
-@SuppressWarnings("serial")
-@PersistenceCapable
-public class Contact implements Serializable {
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Key key;
+@Cache
+@Entity
+public class Contact {
+    @Id Long id;
     
-    @Persistent
-    private String name;
+    @Parent Ref<User> owner;
     
-    @Persistent
-    private String email;
+    String name;
+    
+    String email;
+    
+    @SuppressWarnings("unused")
+    private Contact() {}
     
     public Contact(String email) {
         this.email = email;
