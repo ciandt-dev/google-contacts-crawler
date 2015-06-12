@@ -1,7 +1,6 @@
 package com.ciandt.gcc.api;
 
 import java.io.Serializable;
-import java.util.List;
 
 @SuppressWarnings("serial")
 public class ContactBean implements Serializable {
