@@ -2,17 +2,16 @@ package com.ciandt.gcc.auth;
 
 import java.io.IOException;
 
-import javax.jdo.JDOObjectNotFoundException;
-import javax.jdo.PersistenceManager;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ciandt.gcc.PMF;
+import com.ciandt.gcc.OfyService;
 import com.ciandt.gcc.entities.User;
 import com.google.api.client.auth.oauth2.*;
 import com.google.api.client.extensions.appengine.auth.oauth2.AbstractAppEngineAuthorizationCodeCallbackServlet;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.Objectify;
 
 public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackServlet {
   
@@ -22,16 +21,11 @@ public class OAuth2Callback extends AbstractAppEngineAuthorizationCodeCallbackSe
     protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential)
         throws ServletException, IOException {
         String email = UserServiceFactory.getUserService().getCurrentUser().getEmail();    
-        PersistenceManager pm = PMF.get().getPersistenceManager();
+        Objectify ofy = OfyService.ofy();
         
-        try {
-            pm.getObjectById(User.class, email);
-        } catch (JDOObjectNotFoundException exception) {
-            User user = new User(email); 
-            user.setCredential(credential);
-            pm.makePersistent(user);
-            pm.close();
-        }
+        User user = new User(email); 
+        user.setCredential(credential);
+        ofy.save().entity(user).now();
     }
   
     @Override
