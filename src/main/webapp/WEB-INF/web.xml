@@ -41,6 +41,14 @@
       <servlet-class>com.ciandt.gcc.tasks.Cron</servlet-class>
   </servlet>
   <servlet-mapping>
+      <servlet-name>IndexesCleanup</servlet-name>
+      <url-pattern>/indexes_cleanup</url-pattern>
+  </servlet-mapping>
+  <servlet>
+      <servlet-name>IndexesCleanup</servlet-name>
+      <servlet-class>com.ciandt.gcc.tasks.IndexesCleanup</servlet-class>
+  </servlet>
+  <servlet-mapping>
       <servlet-name>Cron</servlet-name>
       <url-pattern>/cron</url-pattern>
   </servlet-mapping>
@@ -65,4 +73,12 @@
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+    <filter>
+		    <filter-name>ObjectifyFilter</filter-name>
+		    <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+		</filter>
+		<filter-mapping>
+		    <filter-name>ObjectifyFilter</filter-name>
+		    <url-pattern>/*</url-pattern>
+		</filter-mapping>
 </web-app>
